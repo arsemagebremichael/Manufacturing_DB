@@ -1,3 +1,86 @@
+CREATE SCHEMA manufacturing;
+CREATE TABLE manufacturing.employees_table(
+     employee_id SERIAL PRIMARY KEY,
+     first_name VARCHAR(50) NOT NULL,
+     last_name VARCHAR(50) NOT NULL,
+     gender VARCHAR(15),
+     department VARCHAR(50) NOT NULL,
+     hired_date  DATE,
+     salary FLOAT   
+     );
+
+SELECT * FROM employees_table;
+
+INSERT INTO manufacturing.employees_table(
+    first_name,
+    last_name,
+    gender,
+    department,
+    hired_date,
+    salary
+) 
+VALUES
+('John', 'Doe', 'Male', 'IT', '2018-05-01', 60000.00),
+('Jane', 'Smith', 'Female', 'HR', '2019-06-15', 50000.00),
+('Michael', 'Johnson', 'Male', 'Finance', '2017-03-10', 75000.00),
+('Emily', 'Davis', 'Female', 'IT', '2020-11-20', 70000.00),
+('Sarah', 'Brown', 'Female', 'Marketing', '2016-07-30', 45000.00),
+('David', 'Wilson', 'Male', 'Sales', '2019-01-05', 55000.00),
+( 'Chris', 'Taylor', 'Male', 'IT', '2022-02-25', 65000.00);
+;
+
+
+SELECT * FROM manufacturing.employees_table;
+
+CREATE TABLE manufacturing.products(
+product_id SERIAL PRIMARY KEY,
+product_name VARCHAR(50),
+category VARCHAR(50),
+price FLOAT,
+stock INT
+);
+
+INSERT INTO manufacturing.products(product_name,category,price,stock)
+values('Laptop', 'ELectronics', 1200.00, 30),
+('Desk', 'Furniture', 300.00, 50),
+('Chair', 'Furniture', 150.00, 200),
+('Smartphone', 'Electronics', 800.00, 75),
+('Monitor', 'Electronics', 250.00, 40),
+('Bookshelf', 'Furniture', 100.00, 60),
+('Printer', 'Electronics', 200.00, 25);
+
+SELECT * FROM manufacturing.products;
+
+CREATE TABLE manufacturing.sales_table(
+    sales_id SERIAL PRIMARY KEY,
+    product_id INT,
+    employee_id INT,
+    CONSTRAINT product_id
+    FOREIGN KEY (product_id)
+    REFERENCES manufacturing.products(product_id),
+    CONSTRAINT employee_id
+    FOREIGN KEY (employee_id)
+    REFERENCES manufacturing.employees_table(employee_id),
+    sales_date DATE NOT NULL,
+    quantity INT,
+    total FLOAT
+);
+
+SELECT * FROM manufacturing.sales_table;
+
+INSERT INTO manufacturing.sales_table (product_id, employee_id, sales_date, quantity, total) VALUES
+(1, 1, '2021-01-15', 2, 2400.00),
+(2, 2, '2021-03-22', 1, 300.00),
+(3, 3, '2021-05-10', 4, 600.00),
+(4, 4, '2021-07-18', 3, 2400.00),
+(5, 5, '2021-09-25', 2, 500.00),
+(6, 6, '2021-11-30', 1, 100.00),
+(7, 1, '2022-02-15', 1, 200.00),
+(1, 2, '2022-04-10', 1, 1200.00),
+(2, 3, '2022-06-20', 2, 600.00),
+(3, 4, '2022-08-05', 3, 450.00),
+(4, 5, '2022-10-11', 1, 800.00),
+(5, 6, '2022-12-29', 4, 1000.00);
 
 
 -- Number 1
@@ -98,8 +181,9 @@ ORDER BY salary
 DESC LIMIT 5;
 
 -- 20. Select the total number of unique first names in the Employees table. 
-SELECT COUNT(DISTINCT first_name) AS unique_first_name
-FROM manufacturing.employees_table;
+SELECT first_name
+FROM manufacturing.employees_table
+WHERE COUNT(first_name) = 1;
 
 --21. Select all employees and their corresponding sales 
 SELECT first_name, total
